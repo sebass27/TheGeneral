@@ -9,47 +9,62 @@
 DOT = "dot";
 DASH = "dash";
 
-MorseCode = "MorseCode";
-Telephony = "Telephony";
- 
-NATOPhoneticAlphabetMap = {
-	"A" : {MorseCode:[DOT, DASH], Telephony:["Alpha"]},
-	"B" : {MorseCode:[DASH, DOT, DOT, DOT], Telephony:["Bravo"]},
-	"C" : {MorseCode:[DASH, DOT, DASH, DOT], Telephony:["Charlie"]},
-	"D" : {MorseCode:[DASH, DOT, DOT], Telephony:["Delta"]},
-	"E" : {MorseCode:[DOT], Telephony:["Echo"]},
-	"F" : {MorseCode:[DOT, DOT, DASH, DOT], Telephony:["Foxtrot"]},
-	"G" : {MorseCode:[DASH, DASH, DOT], Telephony:["Golf"]},
-	"H" : {MorseCode:[DOT, DOT, DOT, DOT], Telephony:["Hotel"]},
-	"I" : {MorseCode:[DOT, DOT], Telephony:["India"]},
-	"J" : {MorseCode:[DOT, DASH, DASH, DASH], Telephony:["Juliett"]},
-	"K" : {MorseCode:[DASH, DOT, DASH], Telephony:["Kilo"]},
-	"L" : {MorseCode:[DOT, DASH, DOT, DOT], Telephony:["Lima"]},
-	"M" : {MorseCode:[DASH, DASH], Telephony:["Mike"]},
-	"N" : {MorseCode:[DASH, DOT], Telephony:["November"]},
-	"O" : {MorseCode:[DASH, DASH, DASH], Telephony:["Oscar"]},
-	"P" : {MorseCode:[DOT, DASH, DASH, DOT], Telephony:["Papa"]},
-	"Q" : {MorseCode:[DASH, DASH, DOT, DASH], Telephony:["Quebec"]},
-	"R" : {MorseCode:[DOT, DASH, DOT], Telephony:["Romeo"]},
-	"S" : {MorseCode:[DOT, DOT, DOT], Telephony:["Sierra"]},
-	"T" : {MorseCode:[DASH], Telephony:["Tango"]},
-	"U" : {MorseCode:[DOT, DOT, DASH], Telephony:["Uniform"]},
-	"V" : {MorseCode:[DOT, DOT, DOT, DASH], Telephony:["Victor"]},
-	"W" : {MorseCode:[DOT, DASH, DASH], Telephony:["Whiskey"]},
-	"X" : {MorseCode:[DASH, DOT, DOT, DASH], Telephony:["Xray"]},
-	"Y" : {MorseCode:[DASH, DOT, DASH, DASH], Telephony:["Yankee"]},
-	"Z" : {MorseCode:[DASH, DASH, DOT, DOT], Telephony:["Zulu"]},
-	"1" : {MorseCode:[DOT, DASH, DASH, DASH, DASH], Telephony:["One"]},
-	"2" : {MorseCode:[DOT, DOT, DASH, DASH, DASH], Telephony:["Two"]},
-	"3" : {MorseCode:[DOT, DOT, DOT, DASH, DASH], Telephony:["Three"]},
-	"4" : {MorseCode:[DOT, DOT, DOT, DOT, DASH], Telephony:["Four"]},
-	"5" : {MorseCode:[DOT, DOT, DOT, DOT, DOT], Telephony:["Five"]},
-	"6" : {MorseCode:[DASH, DOT, DOT, DOT, DOT], Telephony:["Six"]},
-	"7" : {MorseCode:[DASH, DASH, DOT, DOT, DOT], Telephony:["Seven"]},
-	"8" : {MorseCode:[DASH, DASH, DASH, DOT, DOT], Telephony:["Eight"]},
-	"9" : {MorseCode:[DASH, DASH, DASH, DASH, DOT], Telephony:["Nine"]},
-	"0" : {MorseCode:[DASH, DASH, DASH, DASH, DASH], Telephony:["Zero"]},
-};
+MorseCode = "MORSE CODE";
+Telephony = "TELEPHONY";
+
+SpellingTypes = {
+	MorseCode : "Morse Code",
+	Telephony : "Telephony"
+}
+
+SpeechOutputPattern = "You say |WORD| in |SPELINGTYPE| like so: |SPELLING|."
+WORD = "|WORD|";
+SPELINGTYPE = "|SPELINGTYPE|";
+SPELLING = "|SPELLING|";
+
+/**
+ * Doing this because javascript wasn't supporting key interpolation when making a map literal like so
+   NATOPhoneticAlphabetMap = {
+	 "A" = {MorseCode:[], Telephony: []}
+   }
+ */
+NATOPhoneticAlphabetMap = {};
+NATOPhoneticAlphabetMap["A"] = {}; NATOPhoneticAlphabetMap["A"][MorseCode] = [DOT, DASH]; NATOPhoneticAlphabetMap["A"][Telephony] = ["Alpha"];
+NATOPhoneticAlphabetMap["B"] = {}; NATOPhoneticAlphabetMap["B"][MorseCode] = [DASH, DOT, DOT, DOT]; NATOPhoneticAlphabetMap["B"][Telephony] = ["Bravo"];
+NATOPhoneticAlphabetMap["C"] = {}; NATOPhoneticAlphabetMap["C"][MorseCode] = [DASH, DOT, DASH, DOT]; NATOPhoneticAlphabetMap["C"][Telephony] = ["Charlie"];
+NATOPhoneticAlphabetMap["D"] = {}; NATOPhoneticAlphabetMap["D"][MorseCode] = [DASH, DOT, DOT]; NATOPhoneticAlphabetMap["D"][Telephony] = ["Delta"];
+NATOPhoneticAlphabetMap["E"] = {}; NATOPhoneticAlphabetMap["E"][MorseCode] = [DOT]; NATOPhoneticAlphabetMap["E"][Telephony] = ["Echo"];
+NATOPhoneticAlphabetMap["F"] = {}; NATOPhoneticAlphabetMap["F"][MorseCode] = [DOT, DOT, DASH, DOT]; NATOPhoneticAlphabetMap["F"][Telephony] = ["Foxtrot"];
+NATOPhoneticAlphabetMap["G"] = {}; NATOPhoneticAlphabetMap["G"][MorseCode] = [DASH, DASH, DOT]; NATOPhoneticAlphabetMap["G"][Telephony] = ["Golf"];
+NATOPhoneticAlphabetMap["H"] = {}; NATOPhoneticAlphabetMap["H"][MorseCode] = [DOT, DOT, DOT, DOT]; NATOPhoneticAlphabetMap["H"][Telephony] = ["Hotel"];
+NATOPhoneticAlphabetMap["I"] = {}; NATOPhoneticAlphabetMap["I"][MorseCode] = [DOT, DOT]; NATOPhoneticAlphabetMap["I"][Telephony] = ["India"];
+NATOPhoneticAlphabetMap["J"] = {}; NATOPhoneticAlphabetMap["J"][MorseCode] = [DOT, DASH, DASH, DASH]; NATOPhoneticAlphabetMap["J"][Telephony] = ["Juliett"];
+NATOPhoneticAlphabetMap["K"] = {}; NATOPhoneticAlphabetMap["K"][MorseCode] = [DASH, DOT, DASH]; NATOPhoneticAlphabetMap["K"][Telephony] = ["Kilo"];
+NATOPhoneticAlphabetMap["L"] = {}; NATOPhoneticAlphabetMap["L"][MorseCode] = [DOT, DASH, DOT, DOT]; NATOPhoneticAlphabetMap["L"][Telephony] = ["Lima"];
+NATOPhoneticAlphabetMap["M"] = {}; NATOPhoneticAlphabetMap["M"][MorseCode] = [DASH, DASH]; NATOPhoneticAlphabetMap["M"][Telephony] = ["Mike"];
+NATOPhoneticAlphabetMap["N"] = {}; NATOPhoneticAlphabetMap["N"][MorseCode] = [DASH, DOT]; NATOPhoneticAlphabetMap["N"][Telephony] = ["November"];
+NATOPhoneticAlphabetMap["O"] = {}; NATOPhoneticAlphabetMap["O"][MorseCode] = [DASH, DASH, DASH]; NATOPhoneticAlphabetMap["O"][Telephony] = ["Oscar"];
+NATOPhoneticAlphabetMap["P"] = {}; NATOPhoneticAlphabetMap["P"][MorseCode] = [DOT, DASH, DASH, DOT]; NATOPhoneticAlphabetMap["P"][Telephony] = ["Papa"];
+NATOPhoneticAlphabetMap["Q"] = {}; NATOPhoneticAlphabetMap["Q"][MorseCode] = [DASH, DASH, DOT, DASH]; NATOPhoneticAlphabetMap["Q"][Telephony] = ["Quebec"];
+NATOPhoneticAlphabetMap["R"] = {}; NATOPhoneticAlphabetMap["R"][MorseCode] = [DOT, DASH, DOT]; NATOPhoneticAlphabetMap["R"][Telephony] = ["Romeo"];
+NATOPhoneticAlphabetMap["S"] = {}; NATOPhoneticAlphabetMap["S"][MorseCode] = [DOT, DOT, DOT]; NATOPhoneticAlphabetMap["S"][Telephony] = ["Sierra"];
+NATOPhoneticAlphabetMap["T"] = {}; NATOPhoneticAlphabetMap["T"][MorseCode] = [DASH]; NATOPhoneticAlphabetMap["T"][Telephony] = ["Tango"];
+NATOPhoneticAlphabetMap["U"] = {}; NATOPhoneticAlphabetMap["U"][MorseCode] = [DOT, DOT, DASH]; NATOPhoneticAlphabetMap["U"][Telephony] = ["Uniform"];
+NATOPhoneticAlphabetMap["V"] = {}; NATOPhoneticAlphabetMap["V"][MorseCode] = [DOT, DOT, DOT, DASH]; NATOPhoneticAlphabetMap["V"][Telephony] = ["Victor"];
+NATOPhoneticAlphabetMap["W"] = {}; NATOPhoneticAlphabetMap["W"][MorseCode] = [DOT, DASH, DASH]; NATOPhoneticAlphabetMap["W"][Telephony] = ["Whiskey"];
+NATOPhoneticAlphabetMap["X"] = {}; NATOPhoneticAlphabetMap["X"][MorseCode] = [DASH, DOT, DOT, DASH]; NATOPhoneticAlphabetMap["X"][Telephony] = ["Xray"];
+NATOPhoneticAlphabetMap["Y"] = {}; NATOPhoneticAlphabetMap["Y"][MorseCode] = [DASH, DOT, DASH, DASH]; NATOPhoneticAlphabetMap["Y"][Telephony] = ["Yankee"];
+NATOPhoneticAlphabetMap["Z"] = {}; NATOPhoneticAlphabetMap["Z"][MorseCode] = [DASH, DASH, DOT, DOT]; NATOPhoneticAlphabetMap["Z"][Telephony] = ["Zulu"];
+NATOPhoneticAlphabetMap["1"] = {}; NATOPhoneticAlphabetMap["1"][MorseCode] = [DOT, DASH, DASH, DASH, DASH]; NATOPhoneticAlphabetMap["1"][Telephony] = ["One"];
+NATOPhoneticAlphabetMap["2"] = {}; NATOPhoneticAlphabetMap["2"][MorseCode] = [DOT, DOT, DASH, DASH, DASH]; NATOPhoneticAlphabetMap["2"][Telephony] = ["Two"];
+NATOPhoneticAlphabetMap["3"] = {}; NATOPhoneticAlphabetMap["3"][MorseCode] = [DOT, DOT, DOT, DASH, DASH]; NATOPhoneticAlphabetMap["3"][Telephony] = ["Three"];
+NATOPhoneticAlphabetMap["4"] = {}; NATOPhoneticAlphabetMap["4"][MorseCode] = [DOT, DOT, DOT, DOT, DASH]; NATOPhoneticAlphabetMap["4"][Telephony] = ["Four"];
+NATOPhoneticAlphabetMap["5"] = {}; NATOPhoneticAlphabetMap["5"][MorseCode] = [DOT, DOT, DOT, DOT, DOT]; NATOPhoneticAlphabetMap["5"][Telephony] = ["Five"];
+NATOPhoneticAlphabetMap["6"] = {}; NATOPhoneticAlphabetMap["6"][MorseCode] = [DASH, DOT, DOT, DOT, DOT]; NATOPhoneticAlphabetMap["6"][Telephony] = ["Six"];
+NATOPhoneticAlphabetMap["7"] = {}; NATOPhoneticAlphabetMap["7"][MorseCode] = [DASH, DASH, DOT, DOT, DOT]; NATOPhoneticAlphabetMap["7"][Telephony] = ["Seven"];
+NATOPhoneticAlphabetMap["8"] = {}; NATOPhoneticAlphabetMap["8"][MorseCode] = [DASH, DASH, DASH, DOT, DOT]; NATOPhoneticAlphabetMap["8"][Telephony] = ["Eight"];
+NATOPhoneticAlphabetMap["9"] = {}; NATOPhoneticAlphabetMap["9"][MorseCode] = [DASH, DASH, DASH, DASH, DOT]; NATOPhoneticAlphabetMap["9"][Telephony] = ["Nine"];
+NATOPhoneticAlphabetMap["0"] = {}; NATOPhoneticAlphabetMap["0"][MorseCode] = [DASH, DASH, DASH, DASH, DASH]; NATOPhoneticAlphabetMap["0"][Telephony] = ["Zero"];
  
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
@@ -61,11 +76,10 @@ exports.handler = function (event, context) {
          * Uncomment this if statement and populate with your skill's application ID to
          * prevent someone else from configuring a skill that sends requests to this function.
          */
-        /*
-        if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.[unique-value-here]") {
+        if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.4ed1f11a-8e86-4581-b906-ba8546bfc19d") {
              context.fail("Invalid Application ID");
         }
-        */
+        
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
@@ -164,7 +178,7 @@ function getWelcomeResponse(callback) {
  */
 function getSpelling(intent, session, callback) {
     var cardTitle = intent.name;
-    var wordSlot = intent.slots.Word;
+    var wordsSlot = intent.slots.Words;
 	var spellingTypeSlot = intent.slots.SpellingType;
 	
 	//TODO Add the word and spelling type to the session attributes
@@ -179,54 +193,50 @@ function getSpelling(intent, session, callback) {
     var sessionAttributes = {};
     var shouldEndSession = false;
     var speechOutput = "";
+	var speechOutputList = [];
 
-    if (wordSlot && spellingTypeSlot) {
-        var word = wordSlot.value;
+    if (wordsSlot && spellingTypeSlot) {
+        var words = wordsSlot.value;
 		var spellingType = spellingTypeSlot.value;
-        speechOutput = getSpellingForWordAndType(word, spellingType);
-        repromptText = "You can ask me to spell a word by saying, Spell \"Word\" in Morse Code?";
+		
+		//Alexa seems to be sending the data in lower case
+		spellingType = spellingType.toUpperCase();
+		
+		var wordTokens = tokenizeWord(words);
+		if(wordTokens.length > 1){
+			speechOutputList.push("You specified "+wordTokens.length+ " words to spell out. Here they are in order.");
+		}
+		for(var index in wordTokens){
+			var word = wordTokens[index];
+			speechOutputList.push(constructSpeechOutputPart(word, SpellingTypes[spellingType], getSpellingForWordAndType(word, spellingType)));
+		}
+		//Put a space after the period of each sentence
+		speechOutput = speechOutputList.join(" ");
+        
+        repromptText = "You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?";
     } 
 
     callback(sessionAttributes,
          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
 
+function constructSpeechOutputPart(word, spellingTypeReadable, spelling){
+	return ((SpeechOutputPattern.replace(WORD, word)).replace(SPELINGTYPE, spellingTypeReadable)).replace(SPELLING, spelling);
+}
+
+function tokenizeWord(words){
+	return words.split(" ");
+}
+
 function getSpellingForWordAndType(word, type) {
 	var spelling = [];
-    NATOPhoneticAlphabetMap;
 	console.log(word);
 	console.log(type);
 	for(var indx = 0; indx < word.length; indx++){
 		spelling.push(NATOPhoneticAlphabetMap[word.charAt(indx).toUpperCase()][type].join(" "));
 	}
 	
-	return spelling.join("  ");//Double space to cause some delay possibly
-}
-
-function getColorFromSession(intent, session, callback) {
-    var favoriteColor;
-    var repromptText = null;
-    var sessionAttributes = {};
-    var shouldEndSession = false;
-    var speechOutput = "";
-
-    if (session.attributes) {
-        favoriteColor = session.attributes.favoriteColor;
-    }
-
-    if (favoriteColor) {
-        speechOutput = "Your favorite color is " + favoriteColor + ". Goodbye.";
-        shouldEndSession = true;
-    } else {
-        speechOutput = "I'm not sure what your favorite color is, you can say, my favorite color " +
-            " is red";
-    }
-
-    // Setting repromptText to null signifies that we do not want to reprompt the user.
-    // If the user does not respond or says something that is not understood, the session
-    // will end.
-    callback(sessionAttributes,
-         buildSpeechletResponse(intent.name, speechOutput, repromptText, shouldEndSession));
+	return spelling.join(". ");
 }
 
 // --------------- Helpers that build all of the responses -----------------------
