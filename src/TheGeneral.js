@@ -12,10 +12,9 @@ DASH = "dash";
 MorseCode = "MORSE CODE";
 Telephony = "TELEPHONY";
 
-SpellingTypes = {
-	MorseCode : "Morse Code",
-	Telephony : "Telephony"
-}
+SpellingTypes = {};
+SpellingTypes[MorseCode] = "Morse Code";
+SpellingTypes[Telephony] = "Telephony";
 
 SpeechOutputPattern = "You say |WORD| in |SPELINGTYPE| like so: |SPELLING|."
 WORD = "|WORD|";
@@ -194,10 +193,15 @@ function getSpelling(intent, session, callback) {
     var shouldEndSession = false;
     var speechOutput = "";
 	var speechOutputList = [];
-
-    if (wordsSlot && spellingTypeSlot) {
-        var words = wordsSlot.value;
-		var spellingType = spellingTypeSlot.value;
+	
+	var words = "";
+	var spellingType = "";
+		
+	if(!wordsSlot || !(words = wordsSlot.value)){
+		speechOutputList = "Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?"
+	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value)){
+		speechOutputList = "Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?"
+	} else {
 		
 		//Alexa seems to be sending the data in lower case
 		spellingType = spellingType.toUpperCase();
@@ -212,9 +216,9 @@ function getSpelling(intent, session, callback) {
 		}
 		//Put a space after the period of each sentence
 		speechOutput = speechOutputList.join(" ");
-        
-        repromptText = "You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?";
+		shouldEndSession = true;
     } 
+	repromptText = "You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?";
 
     callback(sessionAttributes,
          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
