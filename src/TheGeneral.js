@@ -211,9 +211,9 @@ function getSpelling(intent, session, callback) {
 	var spellingType = "";
 		
 	if(!wordsSlot || !(words = wordsSlot.value)){
-		speechOutputList = "Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?"
-	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value)){
-		speechOutputList = "Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?"
+		speechOutputList.push("Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
+	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value) || !SpellingTypes[spellingType]){
+		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 	} else {
 		
 		//Alexa seems to be sending the data in lower case
@@ -223,14 +223,16 @@ function getSpelling(intent, session, callback) {
 		if(wordTokens.length > 1){
 			speechOutputList.push("You specified "+wordTokens.length+ " words to spell out. Here they are in order.");
 		}
+		
 		for(var index in wordTokens){
 			var word = wordTokens[index];
 			speechOutputList.push(constructSpeechOutputPart(word, SpellingTypes[spellingType], getSpellingForWordAndType(word, spellingType)));
 		}
-		//Put a space after the period of each sentence
-		speechOutput = speechOutputList.join(" ");
+		
 		shouldEndSession = true;
-    } 
+    }
+	//Put a space after the period of each sentence
+	speechOutput = speechOutputList.join(" ");
 	repromptText = "You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?";
 
     callback(sessionAttributes,
