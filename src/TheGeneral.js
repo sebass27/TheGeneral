@@ -139,7 +139,9 @@ function onIntent(intentRequest, session, callback) {
         getSpelling(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
         getWelcomeResponse(callback);
-    } else {
+    } else if ("AMAZON.StopIntent" === intentName || "AMAZON.CancelIntent" === intentName) {
+	    getExitResponse(callback);
+	} else {
         throw "Invalid intent";
     }
 }
@@ -167,6 +169,17 @@ function getWelcomeResponse(callback) {
     var repromptText = "Please say a word you would like me to spell "+
 	"using NATO Phonetic Alphapet along with the spelling type of Morse Code or Telephony";
     var shouldEndSession = false;
+
+    callback(sessionAttributes,
+        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+function getExitResponse(callback) {
+    var sessionAttributes = {};
+    var cardTitle = "Good Bye";
+    var speechOutput = "Good-bye";
+    var repromptText = "";
+    var shouldEndSession = true;
 
     callback(sessionAttributes,
         buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
@@ -253,8 +266,8 @@ function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
         },
         card: {
             type: "Simple",
-            title: "SessionSpeechlet - " + title,
-            content: "SessionSpeechlet - " + output
+            title: title,
+            content: output
         },
         reprompt: {
             outputSpeech: {
