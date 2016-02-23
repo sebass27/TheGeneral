@@ -161,7 +161,7 @@ function onSessionEnded(sessionEndedRequest, session) {
 function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var sessionAttributes = {};
-    var cardTitle = "Welcome";
+    var cardTitle = "Welcome to The General";
     var speechOutput = "Welcome, Please say a word you would like me to spell " +
 	"using NATO Phonetic Alphapet along with the spelling type of Morse Code or Telephony";
     // If the user either does not reply to the welcome message or says something that is not
