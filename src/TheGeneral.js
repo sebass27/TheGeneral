@@ -21,6 +21,8 @@ WORD = "|WORD|";
 SPELINGTYPE = "|SPELINGTYPE|";
 SPELLING = "|SPELLING|";
 
+CARDTITLE = "The General";
+
 /**
  * Doing this because javascript wasn't supporting key interpolation when making a map literal like so
    NATOPhoneticAlphabetMap = {
@@ -189,7 +191,7 @@ function getExitResponse(callback) {
  * Sets the color in the session and prepares the speech to reply to the user.
  */
 function getSpelling(intent, session, callback) {
-    var cardTitle = intent.name;
+    var cardTitle = CARDTITLE;
     var wordsSlot = intent.slots.Words;
 	var spellingTypeSlot = intent.slots.SpellingType;
 	
@@ -212,12 +214,11 @@ function getSpelling(intent, session, callback) {
 		
 	if(!wordsSlot || !(words = wordsSlot.value)){
 		speechOutputList.push("Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
-	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value) || !SpellingTypes[spellingType]){
-		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
-	} else {
 		
 		//Alexa seems to be sending the data in lower case
-		spellingType = spellingType.toUpperCase();
+	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value.toUpperCase()) || !SpellingTypes[spellingType]){
+		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
+	} else {
 		
 		var wordTokens = tokenizeWord(words);
 		if(wordTokens.length > 1){
