@@ -140,7 +140,7 @@ function onIntent(intentRequest, session, callback) {
     if ("SpellIntent" === intentName) {
         getSpelling(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
-        getWelcomeResponse(callback);
+        getHelpResponse(callback);
     } else if ("AMAZON.StopIntent" === intentName || "AMAZON.CancelIntent" === intentName) {
 	    getExitResponse(callback);
 	} else {
@@ -170,6 +170,18 @@ function getWelcomeResponse(callback) {
     // understood, they will be prompted again with this text.
     var repromptText = "Please say a word you would like me to spell "+
 	"using NATO Phonetic Alphapet along with the spelling type of Morse Code or Telephony";
+    var shouldEndSession = false;
+
+    callback(sessionAttributes,
+        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+function getHelpResponse(callback) {
+    var sessionAttributes = {};
+    var cardTitle = "Help with The General";
+    var speechOutput = "With The General, you can get a morse code interpretation or a telephonic spelling for any word or a list of words."+
+	" Now, what word or list of words can I spell for you?";
+    var repromptText = "What word or list of words can I spell for you?";
     var shouldEndSession = false;
 
     callback(sessionAttributes,
@@ -216,7 +228,7 @@ function getSpelling(intent, session, callback) {
 		speechOutputList.push("Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 		
 		//Alexa seems to be sending the data in lower case
-	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value.toUpperCase()) || !SpellingTypes[spellingType]){
+	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value) || !SpellingTypes[spellingType = spellingTypeSlot.value.toUpperCase()]){
 		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 	} else {
 		
