@@ -140,7 +140,7 @@ function onIntent(intentRequest, session, callback) {
     if ("SpellIntent" === intentName) {
         getSpelling(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
-        getHelpResponse(callback);
+        getHelpResponse(callback, session);
     } else if ("AMAZON.StopIntent" === intentName || "AMAZON.CancelIntent" === intentName) {
 	    getExitResponse(callback);
 	} else {
@@ -160,9 +160,9 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // --------------- Functions that control the skill's behavior -----------------------
 
-function getWelcomeResponse(callback) {
+function getWelcomeResponse(callback, session) {
     // If we wanted to initialize the session to have some attributes we could add those here.
-    var sessionAttributes = {};
+    var sessionAttributes = session.attributes;
     var cardTitle = "Welcome to The General";
     var speechOutput = "Welcome, Please say a word you would like me to spell " +
 	"using NATO Phonetic Alphapet along with the spelling type of Morse Code or Telephony";
@@ -176,8 +176,8 @@ function getWelcomeResponse(callback) {
         buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
 
-function getHelpResponse(callback) {
-    var sessionAttributes = {};
+function getHelpResponse(callback, session) {
+    var sessionAttributes = session.attributes;
     var cardTitle = "Help with The General";
     var speechOutput = "With The General, you can get a morse code interpretation or a telephonic spelling for any word or a list of words."+
 	" Now, what word or list of words can I spell for you?";
@@ -210,13 +210,9 @@ function getSpelling(intent, session, callback) {
 	//TODO Add the word and spelling type to the session attributes
 	//when the user doesn't specify all the slots and you want to maintain what was already given in the session.
 	//This is only if the slots aren't all provided by the NLU
-	var sessionAttributes = {};
-	if (session.attributes) {
-        sessionAttributes = session.attributes;
-    }
+	var sessionAttributes = session.attributes;
 	
     var repromptText = "";
-    var sessionAttributes = {};
     var shouldEndSession = false;
     var speechOutput = "";
 	var speechOutputList = [];
@@ -224,32 +220,59 @@ function getSpelling(intent, session, callback) {
 	var words = "";
 	var spellingType = "";
 		
-	if(!wordsSlot || !(words = wordsSlot.value)){
+	if((!wordsSlot 
+		|| !(words = wordsSlot.value))
+		&& !sessionAttributes[WORD]){
 		speechOutputList.push("Please specify a list of words to spell. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 		
 		//Alexa seems to be sending the data in lower case
-	} else if(!spellingTypeSlot || !(spellingType = spellingTypeSlot.value) || !SpellingTypes[spellingType = spellingTypeSlot.value.toUpperCase()]){
+	} else if((!spellingTypeSlot 
+		|| !(spellingType = spellingTypeSlot.value) 
+		|| !SpellingTypes[spellingType = spellingTypeSlot.value.toUpperCase()])
+		&& !sessionAttributes[SPELINGTYPE]){
 		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 	} else {
 		
-		var wordTokens = tokenizeWord(words);
+		//We will use the session attribute values
+		setKeyValueInSession(sessionAttributes, WORD, words, false);
+		setKeyValueInSession(sessionAttributes, SPELINGTYPE, spellingType, false);
+		
+		var wordTokens = tokenizeWord(sessionAttributes[WORD]);
 		if(wordTokens.length > 1){
 			speechOutputList.push("You specified "+wordTokens.length+ " words to spell out. Here they are in order.");
 		}
 		
 		for(var index in wordTokens){
 			var word = wordTokens[index];
-			speechOutputList.push(constructSpeechOutputPart(word, SpellingTypes[spellingType], getSpellingForWordAndType(word, spellingType)));
+			speechOutputList.push(constructSpeechOutputPart(word, SpellingTypes[sessionAttributes[SPELINGTYPE]], 
+			getSpellingForWordAndType(word, sessionAttributes[SPELINGTYPE])));
 		}
 		
 		shouldEndSession = true;
     }
+	
+	//In the cases where one is set but not the other
+	setKeyValueInSession(sessionAttributes, WORD, words, false);
+	setKeyValueInSession(sessionAttributes, SPELINGTYPE, spellingType, false);
+	
+	
+	
 	//Put a space after the period of each sentence
 	speechOutput = speechOutputList.join(" ");
 	repromptText = "You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?";
 
     callback(sessionAttributes,
          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+function setKeyValueInSession(sessionAttributes, key, value, replaceIfNullOrEmpty){
+	if(replaceIfNullOrEmpty != undefined && replaceIfNullOrEmpty == true){
+		sessionAttributes[key] = value;
+	} else {
+		if(key != undefined && value != undefined && value !== ""){
+			sessionAttributes[key] = value;
+		}
+	}
 }
 
 function constructSpeechOutputPart(word, spellingTypeReadable, spelling){
