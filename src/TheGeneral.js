@@ -212,6 +212,10 @@ function getSpelling(intent, session, callback) {
 	//This is only if the slots aren't all provided by the NLU
 	var sessionAttributes = session.attributes;
 	
+	if(sessionAttributes == undefined){
+		sessionAttributes = {};
+	}
+	
     var repromptText = "";
     var shouldEndSession = false;
     var speechOutput = "";
