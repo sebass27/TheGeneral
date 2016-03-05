@@ -231,9 +231,9 @@ function getSpelling(intent, session, callback) {
 		
 		//Alexa seems to be sending the data in lower case
 	} else if((!spellingTypeSlot 
-		|| !(spellingType = spellingTypeSlot.value) 
+		|| !(spellingTypeSlot.value) 
 		|| !SpellingTypes[spellingType = spellingTypeSlot.value.toUpperCase()])
-		&& !sessionAttributes[SPELINGTYPE]){
+		&& (!sessionAttributes[SPELINGTYPE] || !SpellingTypes[sessionAttributes[SPELINGTYPE]])){
 		speechOutputList.push("Please specify spelling type. You can ask me to spell a word by saying, Spell \"Words\" in Morse Code or Telephony?");
 	} else {
 		
@@ -256,8 +256,9 @@ function getSpelling(intent, session, callback) {
     }
 	
 	//In the cases where one is set but not the other
-	setKeyValueInSession(sessionAttributes, WORD, words, false);
-	setKeyValueInSession(sessionAttributes, SPELINGTYPE, spellingType, false);
+		setKeyValueInSession(sessionAttributes, WORD, words, false);
+		//Don't put session attribute unless it is a valid value
+		setKeyValueInSession(sessionAttributes, SPELINGTYPE, spellingType, false);
 	
 	
 	
