@@ -123,7 +123,7 @@ function onLaunch(launchRequest, session, callback) {
         ", sessionId=" + session.sessionId);
 
     // Dispatch to your skill's launch.
-    getWelcomeResponse(callback);
+    getWelcomeResponse(callback, session);
 }
 
 /**
